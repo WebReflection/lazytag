@@ -1,5 +1,5 @@
 var lazyTag = (function (cache, options) {'use strict';
-  /*! (c) Andrea Giammarchi */
+  /*! (c) 2018, Andrea Giammarchi, (ISC) */
   function load(el, mo) {
     var
       detail = (el.getAttribute('is') || el.nodeName).toLowerCase(),
