@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script>if(!this.customElements)document.write('<script src="https://unpkg.com/document-register-element@1.13.1/build/document-register-element.js"><\x2fscript>');</script>
+  <script defer src="../index.js"></script>
+  <script>
+  this.onload = function () {
+    lazyTag({
+      js: './components',
+      css: './components/css'
+    });
+    setTimeout(function () {
+      document.querySelector('what-ever').appendChild(
+        document.createElement('whatever-else')
+      );
+    }, 1000);
+  };
+  </script>
+</head>
+<body>
+  <what-ever></what-ever>
+</body>
+</html>

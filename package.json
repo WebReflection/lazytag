@@ -1,0 +1,29 @@
+{
+  "name": "lazytag",
+  "version": "0.0.0",
+  "description": "coming soon",
+  "main": "cjs/index.js",
+  "module": "esm/index.js",
+  "unpkg": "min.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "npm run cjs && npm run esm && npm run min && npm run size",
+    "cjs": "cp index.js cjs/ && echo 'module.exports=lazyTag;'>>cjs/index.js",
+    "esm": "cp index.js esm/ && echo 'export default lazyTag;'>>esm/index.js",
+    "min": "echo '/*! (c) 2018, Andrea Giammarchi, (ISC) */'>min.js && uglifyjs index.js --support-ie8 -c -m >> min.js",
+    "size": "cat index.js | wc -c;cat min.js | wc -c;gzip -c9 min.js | wc -c;cat min.js | brotli | wc -c"
+  },
+  "keywords": [
+    "custom",
+    "elements",
+    "lazy",
+    "load"
+  ],
+  "author": "Andrea Giammarchi",
+  "license": "ISC",
+  "devDependencies": {
+    "uglify-js": "^3.5.3"
+  }
+}
