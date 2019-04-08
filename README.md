@@ -1,4 +1,4 @@
-# lazyTag
+# lazytag
 
 Lazy loading Custom Elements and their styles without even thinking about it.
 
