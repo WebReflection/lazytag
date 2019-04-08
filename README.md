@@ -18,3 +18,5 @@ lazyTag({
 ```
 
 The previous example would load automatically `./components/js/my-component.js`, `./components/js/my-sub-component.js`, but also `./components/css/my-component.css` and `./components/css/my-sub-component.css`.
+
+[Live test](https://webreflection.github.io/lazytag/test/).
