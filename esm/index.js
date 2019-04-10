@@ -1,5 +1,5 @@
-var lazyTag = (function (cache, options) {'use strict';
-  /*! (c) 2018, Andrea Giammarchi, (ISC) */
+var lazyTag = (function (cache, options, re) {'use strict';
+  /*! (c) 2019, Andrea Giammarchi, (ISC) */
   function load(el, mo) {
     var
       detail = (el.getAttribute('is') || el.nodeName).toLowerCase(),
@@ -7,7 +7,11 @@ var lazyTag = (function (cache, options) {'use strict';
       ownerDocument,
       node
     ;
-    if (cache.indexOf(detail) < 0 && 0 < detail.indexOf('-')) {
+    if (
+      cache.indexOf(detail) < 0 &&
+      detail.indexOf('-') > 0 &&
+      !re.test(detail)
+    ) {
       cache.push(detail);
       ownerDocument = el.ownerDocument;
       documentElement = ownerDocument.documentElement;
@@ -62,5 +66,10 @@ var lazyTag = (function (cache, options) {'use strict';
     scanner([{addedNodes: [ownerDocument.documentElement]}], mo);
     return mo;
   };
-}([], {childList: true, subtree: true}));
+}(
+  [],
+  {childList: true, subtree: true},
+  // https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name
+  /^(?:annotation-xml|color-profile|font-face(?:|-format|-name|-src|-uri)|missing-glyph)$/
+));
 export default lazyTag;
