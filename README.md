@@ -5,6 +5,8 @@ Lazy loading Custom Elements and their styles without even thinking about it.
 ```html
 <script>
 lazyTag({
+  // an optional *Array* of custom elements to ignore
+  ignore: ['third-parts', 'pre-loaded'],
   // the optional JS path where component-name.js is
   js: './components/js',
   // the optional CSS path where component.name.css is

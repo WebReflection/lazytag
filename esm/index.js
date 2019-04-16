@@ -8,8 +8,9 @@ var lazyTag = (function (cache, options, re) {'use strict';
       node
     ;
     if (
-      cache.indexOf(detail) < 0 &&
       detail.indexOf('-') > 0 &&
+      mo.ignore.indexOf(detail) < 0 &&
+      cache.indexOf(detail) < 0 &&
       !re.test(detail)
     ) {
       cache.push(detail);
@@ -63,6 +64,7 @@ var lazyTag = (function (cache, options, re) {'use strict';
     mo.observe(ownerDocument, options);
     mo.js = settings.js;
     mo.css = settings.css;
+    mo.ignore = settings.ignore || [];
     scanner([{addedNodes: [ownerDocument.documentElement]}], mo);
     return mo;
   };
