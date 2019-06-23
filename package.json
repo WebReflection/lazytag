@@ -1,6 +1,6 @@
 {
   "name": "lazytag",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "coming soon",
   "main": "cjs/index.js",
   "module": "esm/index.js",
