@@ -4,9 +4,13 @@ Lazy loading Custom Elements and their styles without even thinking about it.
 
 ```html
 <script>
+// you can have many lazyTag invokes per page
 lazyTag({
+  // an optional *Array* of custom elements names or RegExp
+  // to consider: any other custom element will be ignored
+  only: [/^io-/],
   // an optional *Array* of custom elements to ignore
-  // this could contain RegExp too
+  // if `only` is used, this list is ignored
   ignore: ['third-parts', 'pre-loaded', /-heresy$/],
   // the optional JS path where component-name.js is
   js: './components/js',

@@ -10,7 +10,7 @@ var lazyTag = (function (cache, re) {'use strict';
     if (
       detail.indexOf('-') > 0 &&
       cache.indexOf(detail) < 0 &&
-      !mo.ignore.some(match, detail)
+      mo.consider(detail)
     ) {
       cache.push(detail);
       ownerDocument = el.ownerDocument;
@@ -22,10 +22,11 @@ var lazyTag = (function (cache, re) {'use strict';
         node.rel = 'styleSheet';
         documentElement.insertBefore(node, documentElement.lastChild);
       }
-      if (mo.js) {
+      var js = mo.js || mo.mjs;
+      if (js) {
         node = ownerDocument.createElement('script');
         node.onerror = remove;
-        node.src = mo.js + '/' + detail + '.js';
+        node.src = js + '/' + detail + (js == mo.js ? '.js' : '.mjs');
         node.type = 'text/javascript';
         documentElement.insertBefore(node, documentElement.lastChild);
       }
@@ -48,7 +49,7 @@ var lazyTag = (function (cache, re) {'use strict';
       addedNodes = records[i].addedNodes;
       for (j = 0; j < addedNodes.length; j++) {
         node = addedNodes[j];
-        if (node.nodeType === 1 && node.parentNode) {
+        if (node.nodeType == 1 && node.parentNode) {
           load(node, mo);
           nodes = node.querySelectorAll('*');
           for (k = 0; k < nodes.length; k++) {
@@ -61,12 +62,19 @@ var lazyTag = (function (cache, re) {'use strict';
   return function (settings) {
     var
       mo = new MutationObserver(scanner),
-      ownerDocument = settings.document || document
+      ownerDocument = settings.document || document,
+      only = [].concat(settings.only || []),
+      ignore = only.length ? only : [re].concat(settings.ignore || [])
     ;
     mo.observe(ownerDocument, {childList: true, subtree: true});
     mo.js = settings.js;
+    mo.mjs = settings.mjs;
     mo.css = settings.css;
-    mo.ignore = [re].concat(settings.ignore || []);
+    mo.consider = only == ignore ?
+      only.some.bind(only, match) :
+      function () {
+        return !ignore.some(match, detail);
+      };
     scanner([{addedNodes: [ownerDocument.documentElement]}], mo);
     return mo;
   };
