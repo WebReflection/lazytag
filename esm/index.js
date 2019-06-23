@@ -1,4 +1,4 @@
-var lazyTag = (function (cache, options, re) {'use strict';
+var lazyTag = (function (cache, re) {'use strict';
   /*! (c) 2019, Andrea Giammarchi, (ISC) */
   function load(el, mo) {
     var
@@ -9,9 +9,8 @@ var lazyTag = (function (cache, options, re) {'use strict';
     ;
     if (
       detail.indexOf('-') > 0 &&
-      mo.ignore.indexOf(detail) < 0 &&
       cache.indexOf(detail) < 0 &&
-      !re.test(detail)
+      !mo.ignore.some(match, detail)
     ) {
       cache.push(detail);
       ownerDocument = el.ownerDocument;
@@ -25,12 +24,15 @@ var lazyTag = (function (cache, options, re) {'use strict';
       }
       if (mo.js) {
         node = ownerDocument.createElement('script');
-        node.onerror = node.onload = remove;
+        node.onerror = remove;
         node.src = mo.js + '/' + detail + '.js';
         node.type = 'text/javascript';
         documentElement.insertBefore(node, documentElement.lastChild);
       }
     }
+  }
+  function match(ignore) {
+    return typeof ignore == 'string' ? ignore == this : ignore.test(this);
   }
   function remove() {
     var parentNode = this.parentNode;
@@ -61,16 +63,15 @@ var lazyTag = (function (cache, options, re) {'use strict';
       mo = new MutationObserver(scanner),
       ownerDocument = settings.document || document
     ;
-    mo.observe(ownerDocument, options);
+    mo.observe(ownerDocument, {childList: true, subtree: true});
     mo.js = settings.js;
     mo.css = settings.css;
-    mo.ignore = settings.ignore || [];
+    mo.ignore = [re].concat(settings.ignore || []);
     scanner([{addedNodes: [ownerDocument.documentElement]}], mo);
     return mo;
   };
 }(
   [],
-  {childList: true, subtree: true},
   // https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name
   /^(?:annotation-xml|color-profile|font-face(?:|-format|-name|-src|-uri)|missing-glyph)$/
 ));
