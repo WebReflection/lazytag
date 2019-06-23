@@ -72,7 +72,7 @@ var lazyTag = (function (cache, re) {'use strict';
     mo.css = settings.css;
     mo.consider = only == ignore ?
       only.some.bind(only, match) :
-      function () {
+      function (detail) {
         return !ignore.some(match, detail);
       };
     scanner([{addedNodes: [ownerDocument.documentElement]}], mo);
